@@ -1,7 +1,7 @@
 name: weather
-description: "A new Flutter project."
+description: "A Flutter weather application"
 
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
+publish_to: "none"
 
 version: 1.0.0+1
 
@@ -13,6 +13,7 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.6
+  geolocator: ^13.0.1
 
 dev_dependencies:
   flutter_test:
