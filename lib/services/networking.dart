@@ -3,24 +3,23 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class NetworkHelper {
-  NetworkHelper({required this.latitude, required this.longitude});
+  final Map<String, String> extendedUrlParams;
 
-  final double latitude;
-  final double longitude;
+  NetworkHelper({required this.extendedUrlParams});
 
   Future getData() async {
     final Uri url = Uri.https(
       'api.openweathermap.org',
       '/data/2.5/weather',
       {
-        'lat': latitude.toString(),
-        'lon': longitude.toString(),
+        ...extendedUrlParams,
         'units': 'metric',
         // Add API key || make a file(api_key.dart) for api key in utilities
         'APPID': apiKey,
       },
     );
     try {
+      print(url);
       final http.Response response = await http.get(url);
 
       if (response.statusCode == 200) {
