@@ -16,6 +16,7 @@ class _LocationScreenState extends State<LocationScreen> {
   late String weatherIcon;
   late int temp;
   late String weatherMessage;
+  late int condition;
 
   WeatherModel weatherModal = WeatherModel();
 
@@ -26,22 +27,32 @@ class _LocationScreenState extends State<LocationScreen> {
   }
 
   void updateUI(dynamic weatherData) {
-    setState(() {
-      if (weatherData == null) {
+    try {
+      setState(() {
+        if (weatherData == null) {
+          temp = 0;
+          cityName = '';
+          weatherIcon = 'Error';
+          weatherMessage = 'There is some error';
+          return;
+        }
+
+        double temperature = weatherData['main']['temp']?.toDouble() ?? 0.0;
+        temp = temperature.toInt();
+        var condition = weatherData['weather'][0]['id'];
+        weatherIcon = weatherModal.getWeatherIcon(condition);
+        weatherMessage = weatherModal.getMessage(temp);
+        cityName = 'in ${weatherData['name']}';
+      });
+    } catch (e) {
+      print(weatherData);
+      setState(() {
         temp = 0;
         cityName = '';
         weatherIcon = 'Error';
-        weatherMessage = 'There is some error';
-        return;
-      }
-
-      double temperature = weatherData['main']['temp']?.toDouble() ?? 0.0;
-      temp = temperature.toInt();
-      var condition = weatherData['weather'][0]['id'];
-      weatherIcon = weatherModal.getWeatherIcon(condition);
-      weatherMessage = weatherModal.getMessage(temp);
-      cityName = 'in ${weatherData['name']}';
-    });
+        weatherMessage = 'Failed to get weather data';
+      });
+    }
   }
 
   @override
